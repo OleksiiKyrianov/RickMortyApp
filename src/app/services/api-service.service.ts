@@ -15,13 +15,13 @@ export class ApiServiceService {
   rickandmortyApi:string =  'https://rickandmortyapi.com/api/character';
 
   constructor(private http: HttpClient) { }
+  //
+  // getAllCharacters(){
+  //   return this.http.get(this.rickandmortyApi)
+  // }
 
-  getAllCharacters(){
-    return this.http.get(this.rickandmortyApi)
-  }
-
-  getCharacterById(id:string){
-    return this.http.get(this.rickandmortyApi + '/'+id);
+  getCharacterById(id:string):Observable<Character>{
+    return this.http.get<Character>(this.rickandmortyApi + '/'+id);
   }
 
   getAllCharactersArray(): Observable<Character[]> {

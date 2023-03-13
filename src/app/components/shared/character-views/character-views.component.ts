@@ -15,9 +15,9 @@ export class CharacterViewsComponent implements OnInit {
   constructor(private apiService: ApiServiceService, private router: Router) { }
 
   ngOnInit(): void {
-    // this.apiService.getAllCharactersArray().subscribe(el=>{
-    //   this.charactersArray = el;
-    // });
+    this.apiService.getAllCharactersArray().subscribe(el=>{
+      this.charactersArray = el;
+    });
   }
 
   public openCard(id:number) {

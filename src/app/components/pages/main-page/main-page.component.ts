@@ -13,6 +13,8 @@ export class MainPageComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(JSON.parse((localStorage.getItem('search'))!));
+
     this.searchValue = JSON.parse((localStorage.getItem('search'))!);
   }
 

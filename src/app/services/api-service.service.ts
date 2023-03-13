@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { InfoResponse } from 'src/app/models/info-response';
 import { Character } from 'src/app/models/character';
@@ -13,15 +12,16 @@ interface Response{
   providedIn: 'root'
 })
 export class ApiServiceService {
+  rickandmortyApi:string =  'https://rickandmortyapi.com/api/character';
 
   constructor(private http: HttpClient) { }
 
   getAllCharacters(){
-    return this.http.get(environment.rickandmortyApi)
+    return this.http.get(this.rickandmortyApi)
   }
 
   getCharacterById(id:string){
-    return this.http.get(environment.rickandmortyApi + '/'+id);
+    return this.http.get(this.rickandmortyApi + '/'+id);
   }
 
   getAllCharactersArray(): Observable<Character[]> {
@@ -43,7 +43,7 @@ export class ApiServiceService {
         }
       });
     };
-    getAllPages(environment.rickandmortyApi);
+    getAllPages(this.rickandmortyApi);
       return new Observable(observer => observer.next(allCharacters));
   }
   sortCharacters(charactersArray:Character[]){

@@ -1,0 +1,39 @@
+<app-history-back></app-history-back>
+<div *ngIf="card" class="card">
+  <div class="img-block">
+    <img class="img-block-img" src="{{card.image}}" alt="{{card.name}}">
+  </div>
+  <h1 class="card-name">{{card.name}}</h1>
+  <div class="card-info-block">
+    <h3 class="card-info-block-h3">Informations</h3>
+    <div class="descript">
+      <p class="descript-descript">
+        Gender:
+      </p>
+      <p class="descript-text">{{card.gender}}</p></div>
+    <div class="descript">
+      <p class="descript-descript">
+        Status:
+      </p>
+      <p class="descript-text">{{card.status}}</p></div>
+    <div class="descript">
+      <p class="descript-descript">
+        Species:
+      </p>
+      <p class="descript-text">{{card.species}}</p>
+    </div>
+    <div class="descript">
+      <p class="descript-descript">
+        Origin:
+      </p>
+      <p class="descript-text">{{card.origin.name}}</p>
+    </div>
+    <div class="descript">
+      <p class="descript-descript">
+        Type:
+      </p>
+      <p class="descript-text">{{card.type === ''? 'unknown': card.type}}</p>
+    </div>
+  </div>
+</div>
+<div *ngIf="!card">Loading...</div>

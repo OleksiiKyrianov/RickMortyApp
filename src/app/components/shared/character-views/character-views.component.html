@@ -1,0 +1,5 @@
+<div *ngIf="charactersArray.length !== 0; else loader" class="characters-block">
+  <app-character-card class="card" [CharacterInfo]="card" *ngFor="let card of charactersArray | characterFilter: searchValue" (click)="openCard(card.id)">
+  </app-character-card>
+</div>
+<ng-template #loader><div class="loader">Loading...</div></ng-template>

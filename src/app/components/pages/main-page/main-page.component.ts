@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiServiceService } from 'src/app/services/api-service.service';
-import { Router } from '@angular/router';
-import { CharacterFilterPipe } from 'src/app/components/shared/pipes/character-filter.pipe';
   export interface Results{
     info: any;
     results: any[]
@@ -10,10 +7,8 @@ import { CharacterFilterPipe } from 'src/app/components/shared/pipes/character-f
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.sass'],
-  providers: [CharacterFilterPipe]
 })
 export class MainPageComponent implements OnInit {
-  charactersArray: any[] = [];
   searchValue:string = '';
   constructor() { }
 

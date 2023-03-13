@@ -4,18 +4,8 @@
     <label class="search-block-label" for="search">
       <input (input)="setSearchValue($event)" id="search" type="text" value="{{searchValue}}" placeholder="Filter by name...">
       <span class="search-block-icon"><img src="./assets/icons/search-icon.svg" alt="search"></span>
-      <button *ngIf="searchValue.length!==0" type="button" class="search-block-button" (click)="clearSearch()">Clear</button>
+      <button *ngIf="searchValue !== ''" type="button" class="search-block-button" (click)="clearSearch()">Clear</button>
     </label>
   </div>
   <app-character-views [searchValue]="searchValue"></app-character-views>
-<!--  <div *ngIf="charactersArray.length !== 0; else loader" class="characters-block">-->
-<!--    <div class="card" title="more details" *ngFor="let card of charactersArray | characterFilter: searchValue" (click)="openCard(card.id)">-->
-<!--      <img class="card-img" src="{{card.image}}" alt="">-->
-<!--      <div class="card-descript">-->
-<!--        <h4>{{card.name | slice:0:20}}</h4>-->
-<!--        <p>{{card.species}}</p>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <ng-template #loader><div class="loader">Loading...</div></ng-template>-->
 </section>

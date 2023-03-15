@@ -1,0 +1,63 @@
+.authComponent
+  position: relative
+.auth-block
+  display: flex
+  flex-direction: row
+  justify-content: flex-end
+  flex-wrap: wrap
+  max-width: 530px
+  width: 100%
+  border: 2px solid greenyellow
+  background-color: #00b0c8
+  position: absolute
+  right: 20px
+  top: 5px
+  padding-left: 10px
+  border-radius: 10px
+  overflow: hidden
+  height: 65px
+  transition: all 200ms ease-in
+  box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.75)
+.auth-filters
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  &-block
+    padding: 10px 15px
+    & label
+      margin-right: 10px
+.auth-block-logo
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: 5px 5px 5px 0
+  position: relative
+  &-img
+    width: 30px
+    height: 30px
+    border-radius: 50%
+    background: gray
+  &-name
+    color: white
+.show-hide
+  position: absolute
+  right: 23px
+  top: -13px
+  color: red
+  font-size: 32px
+  cursor: pointer
+.error-block
+  position: absolute
+  color: red
+  top: 72px
+  right: 20px
+  font-weight: bold
+@media screen and (max-width: 600px)
+  .auth-block, .error-block
+    right: 0
+@media screen and (max-width: 520px)
+  .between
+    justify-content: space-between
+    height: 116px
+  .auth-filters
+    flex-direction: column

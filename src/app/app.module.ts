@@ -11,6 +11,7 @@ import { HeaderComponent } from './components/shared/header/header.component';
 import { CharacterFilterPipe } from './components/shared/pipes/character-filter.pipe';
 import { CharacterViewsComponent } from './components/shared/character-views/character-views.component';
 import { CharacterCardComponent } from 'src/app/components/shared/character-card/character-card.component';
+import { AuthComponent } from './components/shared/auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CharacterCardComponent } from 'src/app/components/shared/character-card
     HeaderComponent,
     CharacterFilterPipe,
     CharacterViewsComponent,
-    CharacterCardComponent
+    CharacterCardComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,

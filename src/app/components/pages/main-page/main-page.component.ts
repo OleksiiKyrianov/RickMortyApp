@@ -10,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainPageComponent implements OnInit {
   searchValue:string = '';
+  authBlock: boolean = false;
   constructor() { }
 
   ngOnInit(): void {
@@ -25,5 +26,15 @@ export class MainPageComponent implements OnInit {
   public clearSearch() {
     this.searchValue = '';
     localStorage.setItem('search', JSON.stringify(this.searchValue));
+  }
+
+  public checkAuth(auth:boolean) {
+    if(auth){
+    this.authBlock = auth;
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
   }
 }

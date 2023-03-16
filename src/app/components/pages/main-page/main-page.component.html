@@ -1,4 +1,4 @@
-<app-auth></app-auth>
+<app-auth *ngIf="authBlock"></app-auth>
 <app-header></app-header>
 <section class="container">
   <div class="search-block">
@@ -7,5 +7,5 @@
       <span class="search-block-icon"><img src="./assets/icons/search-icon.svg" alt="search"></span>
     </label>
   </div>
-  <app-character-views [searchValue]="searchValue"></app-character-views>
+  <app-character-views [searchValue]="searchValue" (UnAuthorithated)="checkAuth($event)"></app-character-views>
 </section>

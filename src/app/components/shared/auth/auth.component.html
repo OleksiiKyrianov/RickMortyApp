@@ -1,0 +1,21 @@
+<div class="auth-block" [ngClass]="{'between': !show}">
+  <div class="auth-filters" *ngIf="!show">
+    <div class="auth-filters-block"><label for="selectAll">getAll</label><input name="logic" id="selectAll" value="getAll" type="radio"></div>
+    <div class="auth-filters-block"><label for="selectPagination">on/off Pagination</label><input name="logic" id="selectPagination" value="selectPagination" type="radio"></div>
+    <div class="auth-filters-block"><label for="selectByGetParams">OldLogic</label><input name="logic" id="selectByGetParams" value="selectByGetParams" type="radio"></div>
+  </div>
+  <div class="auth-block-logo">
+    <div class="auth-block-logo-img"><img *ngIf="user" src="{{this.userImage}}" alt="{{this.userEmail}}"></div>
+    <div class="auth-block-logo-name" title="{{this.userEmail}}">{{user? (this.userName | firstWord | slice:0:12): 'User FirstName'}}</div>
+  </div>
+</div>
+<div class="show-hide" (click)="show=!show">
+  {{show? '<': 'x'}}
+</div>
+
+<div class="error-block">
+  <p *ngIf="!user">You need to login!</p>
+  <p *ngIf="error && !user">Something went wrong!</p>
+  <button class="btn" *ngIf="!user" (click)="signInWithGoogle()">Sign in with Google</button>
+  <button class="btn" *ngIf="user" (click)="signOut()">Sign Out</button>
+</div>

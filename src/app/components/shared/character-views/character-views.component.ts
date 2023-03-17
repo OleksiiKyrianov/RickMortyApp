@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Character } from 'src/app/models/character';
 import { ApiServiceService } from 'src/app/services/api-service.service';
 import { Router } from '@angular/router';
 import { CharacterFilterPipe } from 'src/app/components/shared/pipes/character-filter.pipe';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of, switchMap } from 'rxjs';
 import firebase from 'firebase/compat/app';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { LogicGetService } from 'src/app/services/logic-get.service';
 
 @Component({
   selector: 'app-character-views',
@@ -13,19 +14,37 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   styleUrls: ['./character-views.component.sass'],
   providers: [CharacterFilterPipe]
 })
-export class CharacterViewsComponent implements OnInit {
+export class CharacterViewsComponent implements OnInit, OnChanges {
   charaktersArray!: Character[];
   @Input() searchValue!:string;
+  pagination: boolean = false;
+  countOfPage: number = 1;
+  totalPages: number = 0;
   charactersArray: any[] = [];
   user$!: Observable<firebase.User | null>;
   user: any;
+  errorText: string = 'Loading...';
+  errorFlag:boolean = false;
   @Output() UnAuthorithated = new EventEmitter<boolean>();
-  constructor(public auth: AngularFireAuth, private apiService: ApiServiceService, private router: Router) {  }
+  constructor(public auth: AngularFireAuth, private apiService: ApiServiceService, private router: Router, private logicGetService: LogicGetService) {  }
 
   ngOnInit(): void {
-    this.apiService.getAllCharactersArray().subscribe(el=>{
-      this.charactersArray = el;
-    });
+    this.logicGetService.getSelectedValue().subscribe(value=> {
+      if(value === 'getAll'){
+        this.pagination = false;
+        this.apiService.getAllCharactersArray().subscribe(el=>{
+          this.charactersArray = el;
+        });
+      }
+      if(value === 'selectPagination'){
+        this.pagination = true;
+        if (localStorage.getItem('page')){
+          this.countOfPage = JSON.parse((localStorage.getItem('page'))!);
+        }
+        this.paginationLogic(this.countOfPage);
+      }
+    })
+
     this.user$ = this.auth.user;
     this.user$.subscribe(el=>{
       this.user=el;
@@ -34,13 +53,57 @@ export class CharacterViewsComponent implements OnInit {
       }
     });
   }
+  public paginationLogic(page:number): Character[]{
+      this.countOfPage = page;
+      this.apiService.getAllCharacters(page, this.searchValue).pipe(
+        switchMap(el => {
+          if (el !== null) {
+            this.errorFlag = false;
+            this.totalPages = el.info.pages;
+            this.charactersArray = this.apiService.sortCharacters(el.results);
+          }
+          return of(null);
+        }),
+        catchError(err => {
+          if(err){
+            this.errorText = 'Nothing found...';
+            this.errorFlag =true;
+          }
+          return of(null);
+        })).subscribe();
+      return this.charactersArray;
+  }
 
   public openCard(id:number) {
     localStorage.setItem('id',JSON.stringify(id));
     if(this.user === null){
       this.UnAuthorithated.emit(true)
     }
+    localStorage.setItem('page', JSON.stringify(this.countOfPage));
     this.router.navigate(['/card'])
   }
 
+  public prevPage() {
+    if(this.countOfPage === 1){
+      return
+    }
+    this.countOfPage--;
+    localStorage.setItem('page', JSON.stringify(this.countOfPage));
+    this.paginationLogic(this.countOfPage);
+  }
+
+  public nextPage() {
+    if(this.countOfPage === this.totalPages){
+      return
+    }
+    this.countOfPage++;
+    localStorage.setItem('page', JSON.stringify(this.countOfPage));
+    this.paginationLogic(this.countOfPage);
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if(this.searchValue || this.searchValue === ''){
+      this.paginationLogic(1)
+    }
+  }
 }

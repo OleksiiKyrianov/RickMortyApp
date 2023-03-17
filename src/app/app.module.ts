@@ -10,11 +10,12 @@ import { HeaderComponent } from './components/shared/header/header.component';
 import { CharacterFilterPipe } from './components/shared/pipes/character-filter.pipe';
 import { CharacterViewsComponent } from './components/shared/character-views/character-views.component';
 import { CharacterCardComponent } from 'src/app/components/shared/character-card/character-card.component';
-import { AuthComponent } from './components/shared/auth/auth.component';
+import { AuthComponent } from 'src/app/components/shared/auth-option-menu/auth-option-menu.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from 'src/environments/environment.prod';
 import { FirstWordPipe } from './components/shared/pipes/first-word.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { FirstWordPipe } from './components/shared/pipes/first-word.pipe';
     AppRoutingModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

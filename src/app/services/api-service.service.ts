@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { InfoResponse } from 'src/app/models/info-response';
 import { Character } from 'src/app/models/character';
 
@@ -16,8 +16,8 @@ export class ApiServiceService {
 
   constructor(private http: HttpClient) { }
 
-  getAllCharacters():Observable<Character[]>{
-    return this.http.get<Character[]>(this.rickandmortyApi)
+  getAllCharacters(number: number, searchString?: string):Observable<Response>{
+    return this.http.get<Response>(this.rickandmortyApi + '?page=' + number + `&name=${searchString}`);
   }
 
   getCharacterById(id:string):Observable<Character>{
@@ -46,7 +46,8 @@ export class ApiServiceService {
     getAllPages(this.rickandmortyApi);
       return new Observable(observer => observer.next(allCharacters));
   }
+
   sortCharacters(charactersArray:Character[]){
-    charactersArray.sort((a, b) => a.name.localeCompare(b.name));
+    return charactersArray.sort((a, b) => a.name.localeCompare(b.name));
   }
 }

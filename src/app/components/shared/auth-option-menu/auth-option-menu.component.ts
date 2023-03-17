@@ -3,11 +3,12 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { from } from 'rxjs';
+import { LogicGetService } from 'src/app/services/logic-get.service';
 
 @Component({
   selector: 'app-auth',
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.sass'],
+  templateUrl: './auth-option-menu.component.html',
+  styleUrls: ['./auth-option-menu.component.sass'],
   host: {
     class : 'authComponent'
   }
@@ -19,7 +20,7 @@ export class AuthComponent implements OnInit {
   userEmail!: string;
   userImage!: string;
   error: boolean = false;
-  constructor(public auth: AngularFireAuth) { }
+  constructor(public auth: AngularFireAuth, public logicGetService: LogicGetService) { }
 
   ngOnInit(): void {
     this.auth.authState.subscribe(user => {

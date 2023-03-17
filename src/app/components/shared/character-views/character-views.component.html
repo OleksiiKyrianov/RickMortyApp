@@ -2,4 +2,15 @@
   <app-character-card class="card" [CharacterInfo]="card" *ngFor="let card of charactersArray | characterFilter: searchValue" (click)="openCard(card.id)">
   </app-character-card>
 </div>
-<ng-template #loader><div class="loader">Loading...</div></ng-template>
+<div *ngIf="charactersArray.length !== 0 && errorFlag" class="loader">{{errorText}}</div>
+<div *ngIf="pagination" class="pagination">
+  <button class="pagination-arrow left" *ngIf="countOfPage > 1" (click)="prevPage()"><</button>
+  <div class="pagination-page">
+    <div class="pagination-pages-wrap"><p class="pagination-pages" *ngIf="countOfPage > 1" (click)="this.paginationLogic(1)">1</p></div>
+    <div class="pagination-pages active">{{countOfPage}}</div>
+    <div class="pagination-pages-wrap"><p class="pagination-pages" *ngIf="countOfPage < totalPages" (click)="this.paginationLogic(totalPages)">{{totalPages}}</p></div>
+  </div>
+  <button class="pagination-arrow right" *ngIf="countOfPage < totalPages" (click)="nextPage()">></button>
+</div>
+
+<ng-template #loader><div class="loader">{{'Loading...'}}</div></ng-template>

@@ -1,11 +1,15 @@
 <app-auth *ngIf="authBlock"></app-auth>
 <app-header></app-header>
 <section class="container">
-  <div class="search-block">
+  <form [formGroup]="formInput" class="search-block">
     <label class="search-block-label" for="search">
-      <input (input)="setSearchValue($event)" id="search" type="text" value="{{searchValue}}" placeholder="Filter by name...">
+      <input formControlName="searchInput" (input)="setSearchValue($event)" id="search" type="text"
+             value="{{searchValue}}" placeholder="Filter by name..."
+             [ngClass]="{'invalid': formInput.controls['searchInput'].hasError('pattern')}"
+      >
+      <span *ngIf="formInput.controls['searchInput'].hasError('pattern')" class="search-block-errors">This value is not allowed! Only a-z and 0-9</span>
       <span class="search-block-icon"><img src="./assets/icons/search-icon.svg" alt="search"></span>
     </label>
-  </div>
+  </form>
   <app-character-views [searchValue]="searchValue" (UnAuthorithated)="checkAuth($event)"></app-character-views>
 </section>

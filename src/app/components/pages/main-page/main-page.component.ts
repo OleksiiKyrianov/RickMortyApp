@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
   export interface Results{
     info: any;
     results: any[]
@@ -11,10 +12,14 @@ import { Component, OnInit } from '@angular/core';
 export class MainPageComponent implements OnInit {
   searchValue:string = '';
   authBlock: boolean = false;
+  formInput!: FormGroup;
   constructor() { }
 
   ngOnInit(): void {
     this.searchValue = JSON.parse((localStorage.getItem('search'))!);
+    this.formInput = new FormGroup({
+      searchInput: new FormControl(this.searchValue,[Validators.pattern(/^[a-zA-Z0-9]*$/)] )
+    })
   }
 
   public setSearchValue(event: Event) {

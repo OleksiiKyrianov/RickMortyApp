@@ -10,7 +10,6 @@ export class CharacterFilterPipe implements PipeTransform {
     if (!characters || !searchTerm) {
       return characters;
     }
-
     return characters.filter(character =>
       character.name.toLowerCase().includes(searchTerm.toLowerCase())
     );

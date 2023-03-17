@@ -32,9 +32,7 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
     this.logicGetService.getSelectedValue().subscribe(value=> {
       if(value === 'getAll'){
         this.pagination = false;
-        this.apiService.getAllCharactersArray().subscribe(el=>{
-          this.charactersArray = el;
-        });
+        this.getAllLogic();
       }
       if(value === 'selectPagination'){
         this.pagination = true;
@@ -44,7 +42,6 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
         this.paginationLogic(this.countOfPage);
       }
     })
-
     this.user$ = this.auth.user;
     this.user$.subscribe(el=>{
       this.user=el;
@@ -52,6 +49,12 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
         this.UnAuthorithated.emit(true);
       }
     });
+  }
+  private getAllLogic(): Character[]{
+    this.apiService.getAllCharactersArray().subscribe(el=>{
+      this.charactersArray = el;
+    });
+    return this.charactersArray;
   }
   public paginationLogic(page:number): Character[]{
       this.countOfPage = page;
@@ -102,8 +105,11 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if(this.searchValue || this.searchValue === ''){
+    if(this.pagination && this.searchValue || this.searchValue === ''){
       this.paginationLogic(1)
+    }
+    if(!this.pagination && this.searchValue){
+      this.getAllLogic();
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Character } from 'src/app/models/character';
 import { ApiServiceService } from 'src/app/services/api-service.service';
 import { Router } from '@angular/router';
@@ -12,7 +12,8 @@ import { LogicGetService } from 'src/app/services/logic-get.service';
   selector: 'app-character-views',
   templateUrl: './character-views.component.html',
   styleUrls: ['./character-views.component.sass'],
-  providers: [CharacterFilterPipe]
+  providers: [CharacterFilterPipe],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CharacterViewsComponent implements OnInit, OnChanges {
   charaktersArray!: Character[];
@@ -26,7 +27,7 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
   errorText: string = 'Loading...';
   errorFlag:boolean = false;
   @Output() UnAuthorithated = new EventEmitter<boolean>();
-  constructor(public auth: AngularFireAuth, private apiService: ApiServiceService, private router: Router, private logicGetService: LogicGetService) {  }
+  constructor(public auth: AngularFireAuth, private apiService: ApiServiceService, private router: Router, private logicGetService: LogicGetService, private cdr: ChangeDetectorRef) {  }
 
   ngOnInit(): void {
     this.logicGetService.getSelectedValue().subscribe(value=> {
@@ -53,6 +54,7 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
   private getAllLogic(): Character[]{
     this.apiService.getAllCharactersArray().subscribe(el=>{
       this.charactersArray = el;
+      this.cdr.detectChanges();
     });
     return this.charactersArray;
   }
@@ -64,6 +66,7 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
             this.errorFlag = false;
             this.totalPages = el.info.pages;
             this.charactersArray = this.apiService.sortCharacters(el.results);
+            this.cdr.detectChanges();
           }
           return of(null);
         }),

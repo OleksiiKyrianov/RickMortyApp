@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-  export interface Results{
-    info: any;
-    results: any[]
+import { Character } from 'src/app/models/character';
+import { InfoResponse } from 'src/app/models/info-response';
+
+export interface Results{
+    info: InfoResponse,
+    results: Character[]
   }
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.sass'],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPageComponent implements OnInit {
   searchValue:string = '';
@@ -16,7 +20,9 @@ export class MainPageComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.searchValue = JSON.parse((localStorage.getItem('search'))!);
+    if(JSON.parse((localStorage.getItem('search'))!) === null){
+      localStorage.setItem('search', JSON.stringify(this.searchValue));
+    }else{this.searchValue = JSON.parse((localStorage.getItem('search'))!);}
     this.formInput = new FormGroup({
       searchInput: new FormControl(this.searchValue,[Validators.pattern(/^[a-zA-Z0-9]*$/)] )
     })

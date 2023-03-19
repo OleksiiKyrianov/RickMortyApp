@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { InfoResponse } from 'src/app/models/info-response';
 import { Character } from 'src/app/models/character';
 

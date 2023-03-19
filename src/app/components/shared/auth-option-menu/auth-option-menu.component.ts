@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -11,7 +11,8 @@ import { LogicGetService } from 'src/app/services/logic-get.service';
   styleUrls: ['./auth-option-menu.component.sass'],
   host: {
     class : 'authComponent'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthComponent implements OnInit {
   show:boolean = false;
@@ -20,7 +21,7 @@ export class AuthComponent implements OnInit {
   userEmail!: string;
   userImage!: string;
   error: boolean = false;
-  constructor(public auth: AngularFireAuth, public logicGetService: LogicGetService) { }
+  constructor(public auth: AngularFireAuth, public logicGetService: LogicGetService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.auth.authState.subscribe(user => {
@@ -30,6 +31,7 @@ export class AuthComponent implements OnInit {
         this.userEmail = this.user.user.email;
         this.userImage = this.user.user.photoURL;
       }
+      this.cdr.detectChanges();
     });
   }
 

@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Character } from 'src/app/models/character';
 import { ApiServiceService } from 'src/app/services/api-service.service';
 import { Router } from '@angular/router';
 import { CharacterFilterPipe } from 'src/app/components/shared/pipes/character-filter.pipe';
-import { Observable, catchError, of, switchMap } from 'rxjs';
+import { Observable, catchError, of, switchMap, Subscription } from 'rxjs';
 import firebase from 'firebase/compat/app';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { LogicGetService } from 'src/app/services/logic-get.service';
@@ -15,7 +15,7 @@ import { LogicGetService } from 'src/app/services/logic-get.service';
   providers: [CharacterFilterPipe],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CharacterViewsComponent implements OnInit, OnChanges {
+export class CharacterViewsComponent implements OnInit, OnChanges, OnDestroy {
   charaktersArray!: Character[];
   @Input() searchValue!:string;
   pagination: boolean = false;
@@ -26,11 +26,13 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
   user: any;
   errorText: string = 'Loading...';
   errorFlag:boolean = false;
+  subscr!: Subscription;
+  userSubscr!: Subscription;
   @Output() UnAuthorithated = new EventEmitter<boolean>();
   constructor(public auth: AngularFireAuth, private apiService: ApiServiceService, private router: Router, private logicGetService: LogicGetService, private cdr: ChangeDetectorRef) {  }
 
   ngOnInit(): void {
-    this.logicGetService.getSelectedValue().subscribe(value=> {
+    this.subscr = this.logicGetService.getSelectedValue().subscribe(value=> {
       if(value === 'getAll'){
         this.pagination = false;
         this.getAllLogic();
@@ -44,7 +46,7 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
       }
     })
     this.user$ = this.auth.user;
-    this.user$.subscribe(el=>{
+    this.userSubscr = this.user$.subscribe(el=>{
       this.user=el;
       if(this.user !== null){
         this.UnAuthorithated.emit(true);
@@ -59,8 +61,8 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
     return this.charactersArray;
   }
   public paginationLogic(page:number): Character[]{
-      this.countOfPage = page;
-      this.apiService.getAllCharacters(page, this.searchValue).pipe(
+    this.countOfPage = page;
+    this.apiService.getAllCharacters(page, this.searchValue).pipe(
         switchMap(el => {
           if (el !== null) {
             this.errorFlag = false;
@@ -114,5 +116,10 @@ export class CharacterViewsComponent implements OnInit, OnChanges {
     if(!this.pagination && this.searchValue){
       this.getAllLogic();
     }
+  }
+
+  public ngOnDestroy() {
+    this.subscr.unsubscribe();
+    this.userSubscr.unsubscribe();
   }
 }

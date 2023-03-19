@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { from } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 import { LogicGetService } from 'src/app/services/logic-get.service';
 
 @Component({
@@ -14,17 +14,18 @@ import { LogicGetService } from 'src/app/services/logic-get.service';
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   show:boolean = false;
   user: any;
   userName!: string;
   userEmail!: string;
   userImage!: string;
+  authSubscr!: Subscription;
   error: boolean = false;
   constructor(public auth: AngularFireAuth, public logicGetService: LogicGetService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.auth.authState.subscribe(user => {
+    this.authSubscr = this.auth.authState.subscribe(user => {
       if (user) {
         this.user = user.multiFactor;
         this.userName = this.user.user.displayName;
@@ -50,4 +51,7 @@ export class AuthComponent implements OnInit {
     location. reload();
   }
 
+  public ngOnDestroy() {
+    this.authSubscr.unsubscribe();
+  }
 }

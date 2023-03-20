@@ -3,7 +3,7 @@
   </app-character-card>
 </div>
 <div *ngIf="charactersArray.length !== 0 && errorFlag" class="loader">{{errorText}}</div>
-<div *ngIf="pagination" class="pagination">
+<div *ngIf="pagination && !errorFlag" class="pagination">
   <button class="pagination-arrow left" *ngIf="countOfPage > 1" (click)="prevPage()"><</button>
   <div class="pagination-page">
     <div class="pagination-pages-wrap"><p class="pagination-pages" *ngIf="countOfPage > 1" (click)="this.paginationLogic(1)">1</p></div>

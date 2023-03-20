@@ -8,8 +8,8 @@
     <div class="auth-block-logo-name" title="{{this.userEmail}}">{{user? (this.userName | firstWord | slice:0:12): 'User FirstName'}}</div>
   </div>
 </div>
-<div class="show-hide" (click)="show=!show">
-  {{show? '<': 'x'}}
+<div class="show-hide" title="collapse" (click)="show=!show">
+  {{show? '<': '>'}}
 </div>
 
 <div class="error-block">
